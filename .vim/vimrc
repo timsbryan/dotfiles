@@ -1,0 +1,136 @@
+syn on
+set number
+set tabstop=2 expandtab shiftwidth=2 smarttab
+set autoindent cindent
+" To get true colours https://github.com/vim/vim/issues/993
+let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
+set termguicolors
+
+colorscheme gruvbox
+
+set clipboard=unnamedplus,unnamed,autoselect
+
+set undofile
+set undodir=~/.vimundo
+
+"https://stackoverflow.com/questions/15375992/vim-difference-between-t-co-256-and-term-xterm-256color-in-conjunction-with-tmu
+"set t_Co=256
+
+set ruler
+
+"Some things from https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
+set backspace=indent,eol,start
+set complete-=i
+
+set nrformats-=octal
+
+set laststatus=2
+set wildmenu
+
+set display+=lastline
+
+if &encoding ==# 'latin1' && has('gui_running')
+  set encoding=utf-8
+endif
+
+if &listchars ==# 'eol:$'
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+endif
+
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j "Delete comment character when joining commented lines
+endif
+
+set autoread
+
+if &history < 1000
+  set history=1000
+endif
+
+if &tabpagemax < 50
+  set tabpagemax=50
+endif
+
+if !empty(&viminfo)
+  set viminfo^=!
+endif
+
+set sessionoptions-=options
+set viewoptions-=options
+
+"Allow color schemes to do bright colors without forcing bold.
+if &t_Co == 8 && $TERM !~# '^Eterm'
+  set t_Co=16
+endif
+
+if empty(mapcheck('<C-U>', 'i'))
+  inoremap <C-U> <C-G>u<C-U>
+endif
+
+if empty(mapcheck('<C-W>', 'i'))
+  inoremap <C-W> <C-G>u<C-W>
+endif
+
+"netrw set up
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+augroup ProjectDrawer
+  autocmd!
+  autocmd VimEnter * :Vexplore
+augroup END
+
+" Look into these at some point as might not be needed by >=Vim 8
+" Mostly from https://github.com/AlecRust/dotfiles/blob/master/.vimrc
+" Optimize for fast terminal connections
+set ttyfast
+
+" Add the g flag to search/replace by default
+set gdefault
+
+" Change mapleader
+let mapleader=","
+
+" Centralize backups, swapfiles and undo history
+set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+if exists("&undodir")
+  set undodir=~/.vim/undo
+endif
+
+" Don’t create backups when editing files in certain directories
+set backupskip=/tmp/*,/private/tmp/*
+
+" Respect modeline in files
+"set modeline
+"set modelines=4
+
+" Highlight current line
+set cursorline
+
+" Show “invisible” characters
+set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
+set list
+
+" Highlight searches
+set hlsearch
+
+" Ignore case of searches
+set ignorecase
+
+" Highlight dynamically as pattern is typed
+set incsearch
+
+" Show the (partial) command as it’s being typed
+set showcmd
+
+" Use relative line numbers
+if exists("&relativenumber")
+  set relativenumber
+  au BufReadPost * set relativenumber
+endif
+
+" vim:set ft=vim et sw=2:
